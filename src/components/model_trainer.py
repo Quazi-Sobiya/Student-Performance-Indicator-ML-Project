@@ -2,7 +2,7 @@ import os
 import sys
 from dataclasses import dataclass
 
-from catboost import catboostRegressor
+from catboost import CatBoostRegressor
 from sklearn.ensemble import (
     AdaBoostRegressor,
     GradientBoostingRegressor,
@@ -13,7 +13,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
-from Xgboost import xGBRegressor
+from xgboost import XGBRegressor
 
 from src.exception import CustomException
 from src.logger import logging
@@ -32,9 +32,9 @@ class ModelTrainer:
         try:
             logging.info("splitting training and test input data")
             x_train,y_train,x_test,y_test=(
-                train_array[:,:,-1],
+                train_array[:,:-1],
                 train_array[:,-1],
-                test_array[:,:,-1],
+                test_array[:,:-1],
                 test_array[:,-1]
             )
             models={
@@ -66,19 +66,18 @@ class ModelTrainer:
             logging.info(f"Best found model on both training and testing dataset")
 
 
-           save_object(
-               file_path=self.model_trainer_config.trained_model_file_path,
+            save_object(
+               save_path=self.model_trainer_config.trained_model_file_path,
                obj=best_model
             )
         
             predicted = best_model.predict(x_test)
 
-            r2_score=r2_score(y_test,predicted)
+            score_value=r2_score(y_test,predicted)
+            return score_value
 
-            
-        
-            except Exception as e:
-                raise CustomException(e,sys)
+        except Exception as e:
+            raise CustomException(e,sys)
            
 
 

@@ -63,10 +63,10 @@ if __name__=="__main__":
 
     # Instantiate DataTransformation and perform data transformation  
     data_transformation=DataTransformation()
-    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+    train_arr,test_arr,preprocessor_path=data_transformation.initiate_data_transformation(train_data,test_data)
 
     ModelTrainer=ModelTrainer()
-    print(ModelTrainer.initiate_model_trainer(train_arr,test_arr))
+    print(ModelTrainer.initiate_model_trainer(train_arr,test_arr,preprocessor_path))
     
 
 
